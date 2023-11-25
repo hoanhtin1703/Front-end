@@ -25,7 +25,7 @@ const Dashboard = () => {
   const getAllPosts = async () => {
     setLoading(true);
     try {
-      const { data } = await autoFetch.get("getallposts");
+      const { data } = await autoFetch.get(`v1/getnewpost?page=1&pageSize=5`);
       setPosts(data.data);
     } catch (error) {
       console.log(error);
@@ -36,7 +36,9 @@ const Dashboard = () => {
   // Pagination 5 page
   const getNewPosts = async () => {
     try {
-      const { data } = await autoFetch.get("getallposts");
+      const { data } = await autoFetch.get(
+        `v1/getnewpost?page=${page + 1}&pageSize=5`
+      );
       setPage(page + 1);
       // @ts-ignore
       setPosts([...posts, ...data.data]);

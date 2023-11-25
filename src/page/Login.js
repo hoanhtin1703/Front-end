@@ -24,7 +24,7 @@ const Login = () => {
     try {
       const { password, rememberPassword } = state;
       const email = state.email.toLowerCase();
-      const { data } = await autoFetch.post("singin", {
+      const { data } = await autoFetch.post("v1/singin", {
         email,
         password,
         rememberPassword,

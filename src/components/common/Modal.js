@@ -40,7 +40,7 @@ const Modal = ({
       let formData = new FormData();
       formData.append("file", file);
       formData.append("content", text);
-      formData.append("author_id", user._id);
+      formData.append("author", user._id);
 
       if (isEditPost) {
         setFormDataEdit(formData);

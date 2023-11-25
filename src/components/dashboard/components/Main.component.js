@@ -43,9 +43,9 @@ const Center = ({
     try {
       if (formData) {
         console.log(formData.getAll("file"));
-        const { data } = await autoFetch.post(`createnewpost`, formData);
+        const { data } = await autoFetch.post(`v1/createnewpost`, formData);
         if (data.status === true) {
-          setPosts([data.post, ...posts]);
+          setPosts([data.data, ...posts]);
           toast.success(data.message);
           setLoadingCreateNewPost(false);
         } else {
@@ -103,8 +103,8 @@ const Center = ({
           <Post
             key={post._id}
             currentPost={post}
-            user_img={user.profilePicture}
-            userId={post.author._id}
+            user_img={post.author.profilePicture}
+            userId={post.author}
             className={!dark ? "shadow-post" : ""}
             userRole={user.isAdmin}
           />
