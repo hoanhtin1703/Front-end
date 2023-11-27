@@ -9,8 +9,10 @@ import {
   AiFillHeart,
   AiOutlineSend,
   AiOutlineCamera,
+  AiFillLike,
+  AiOutlineLike,
 } from "react-icons/ai";
-import { FiMessageSquare } from "react-icons/fi";
+import { FiMessageSquare, FiMessageCircle } from "react-icons/fi";
 import { TiTick } from "react-icons/ti";
 import { MdCancel } from "react-icons/md";
 // component
@@ -38,7 +40,8 @@ const Post = ({
   const [isDelete, setIsDelete] = useState(false);
   const [imageComment, setImageComment] = useState(null);
   const [formData, setFormData] = useState(null);
-
+  const [likeCount, setlikeCount] = useState(post.like_count);
+  const [commentCount, setcommentCount] = useState(post.comments_count);
   // open model for edit post
   const [openModal, setOpenModal] = useState(false);
 
@@ -54,9 +57,6 @@ const Post = ({
   useEffect(() => {
     setOneState("openModal", openModal);
   }, [openModal]);
-
-  let likeCount = post.likes.length;
-  let commentCount = post.comments.length;
 
   // set image to show in form
   const handleImage = (e) => {
@@ -121,21 +121,28 @@ const Post = ({
   const unlike = async (postId) => {
     setLikeLoading(true);
     try {
-      const { data } = await autoFetch.put("/api/post/unlike-post", {
-        postId,
+      const { data } = await autoFetch.put("v1/unlike_post", {
+        author_id: userId,
+        blog_id: postId,
       });
-      setPost({ ...post, likes: data.post.likes });
+      setPost({ ...post, likes: data.data.likes });
+      setlikeCount(data.data.like_count);
     } catch (error) {
       console.log(error);
     }
+
     setLikeLoading(false);
   };
-
+  // Set Like
   const like = async (postId) => {
     setLikeLoading(true);
     try {
-      const { data } = await autoFetch.put("/api/post/like-post", { postId });
-      setPost({ ...post, likes: data.post.likes });
+      const { data } = await autoFetch.put("v1/like_post", {
+        author_id: userId,
+        blog_id: postId,
+      });
+      setPost({ ...post, likes: data.data.likes });
+      setlikeCount(data.data.like_count);
     } catch (error) {
       console.log(error);
     }
@@ -331,20 +338,23 @@ const Post = ({
             <>
               {!post.likes.includes(userId) ? (
                 <>
-                  <AiOutlineHeart className="text-[18px] text-[#65676b] dark:text-[#afb0b1]" />
-                  <span className="like-count">
-                    {`${likeCount} like${likeCount > 1 ? "s" : ""}`}
-                  </span>
+                  <img
+                    src="../images/like (1).png"
+                    alt="like"
+                    className="w-[20px] md:w-[20px] h-auto text-[12px] transition-all "
+                  />
+                  <span className="like-count">{likeCount}</span>
                 </>
               ) : (
                 <>
-                  <AiFillHeart className="text-[18px] text-[#c22727] dark:text-[#c22727]" />
-                  <span className="like-count">
-                    {likeCount > 1
-                      ? `You and ${likeCount - 1} other${
-                          likeCount > 2 ? "s" : ""
-                        }`
-                      : `You`}
+                  {/* <AiFillLike className="text-[18px] text-[#0866FF] dark:text-[#0866FF]" /> */}
+                  <img
+                    src="../images/like (1).png"
+                    alt="like"
+                    className="w-[20px] md:w-[20px] h-auto text-[12px] transition-all "
+                  />
+                  <span className="like-count transition-all">
+                    {likeCount > 1 ? `You and ${likeCount - 1} other` : `You`}
                   </span>
                 </>
               )}
@@ -362,7 +372,7 @@ const Post = ({
       <div className="mx-[12px] mt-2 py-1 flex items-center justify-between border-y dark:border-y-[#3E4042] border-y-[#CED0D4] px-[6px]  ">
         {post.likes.includes(userId) ? (
           <button
-            className=" py-[6px] px-2 flex items-center justify-center gap-x-1 w-full rounded-sm hover:bg-[#e0e0e0] text-[#c22727] dark:hover:bg-[#3A3B3C] font-semibold text-[15px] dark:text-[#c22727] transition-50 cursor-pointer  "
+            className=" py-[6px] px-2 flex items-center justify-center gap-x-1 w-full rounded-sm hover:bg-[#e0e0e0] text-[#0866FF] dark:hover:bg-[#3A3B3C] font-semibold text-[15px] dark:text-[#0866FF] transition-50 cursor-pointer  "
             onClick={() => unlike(post._id)}
             disabled={likeLoading}
           >
@@ -371,11 +381,11 @@ const Post = ({
                 type="spin"
                 width={20}
                 height={20}
-                color="#c22727"
+                color="#0866FF"
               />
             ) : (
               <>
-                <AiFillHeart className="text-xl translate-y-[1px] text-[#c22727] " />
+                <AiFillLike className="text-xl translate-y-[1px] text-[#0866FF] " />
                 Like
               </>
             )}
@@ -395,7 +405,7 @@ const Post = ({
               />
             ) : (
               <>
-                <AiOutlineHeart className="text-xl translate-y-[1px] " />
+                <AiOutlineLike className="text-xl translate-y-[1px] transition-all  " />
                 Like
               </>
             )}
@@ -409,7 +419,7 @@ const Post = ({
           }}
           disabled={!commentCount}
         >
-          <FiMessageSquare className="text-xl translate-y-[2px] " />
+          <FiMessageCircle className="text-xl translate-y-[2px] -rotate-90" />
           Comment
         </button>
       </div>

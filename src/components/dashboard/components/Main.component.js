@@ -104,7 +104,7 @@ const Center = ({
             key={post._id}
             currentPost={post}
             user_img={post.author.profilePicture}
-            userId={post.author}
+            userId={user._id}
             className={!dark ? "shadow-post" : ""}
             userRole={user.isAdmin}
           />
