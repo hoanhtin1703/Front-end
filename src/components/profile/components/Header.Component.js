@@ -69,7 +69,7 @@ const Header = ({
           Edit profile
         </button>
       );
-    if (own.following.includes(user._id)) {
+    if (user.following.includes(user._id)) {
       return (
         <button
           className="flex gap-x-1 items-center font-semibold px-3 py-2 bg-[#D8DADF]/50 hover:bg-[#D8DADF] dark:bg-[#4E4F50]/50 dark:hover:bg-[#4E4F50] transition-20 rounded-md "
@@ -120,13 +120,13 @@ const Header = ({
                 </div>
 
                 <div className="ml-1.5 font-normal text-xl md:text-[28px] flex-shrink-0 ">
-                  ({user.username})
+                  ({user.firstname},{user.lastname})
                 </div>
               </div>
             </div>
             <div className="dark:text-[#b0b3b8] font-semibold text-[17px] flex gap-x-1.5 items-center text-[#65676b] justify-center sm:justify-start">
               <span className="cursor-pointer flex-shrink-0 ">
-                {/* {user.following.length} following */}
+                {/* {own.following.length} following */}
               </span>
               <GoPrimitiveDot />
               <span className="cursor-pointer flex-shrink-0 ">

@@ -30,6 +30,7 @@ const Post = ({
   getDeletePostId = (postId) => {},
 }) => {
   const navigate = useNavigate();
+  const { user } = useAppContext();
   const { autoFetch, setOneState } = useAppContext();
   const [showOption, setShowOption] = useState(false);
   const [showComment, setShowComment] = useState(false);
@@ -103,12 +104,12 @@ const Post = ({
           return;
         }
       }
-      const { data } = await autoFetch.put("/api/post/add-comment", {
-        postId,
-        comment: textComment,
-        image,
+      const { data } = await autoFetch.put("v1/add_commnent", {
+        blog_id: postId,
+        author_id: userId,
+        text: textComment,
       });
-      setPost({ ...post, comments: data.post.comments });
+      setPost({ ...post, comments: data.data.comments });
       setShowComment(true);
       setTextComment("");
       setImageComment(null);
@@ -241,7 +242,7 @@ const Post = ({
       <div className="flex items-center pl-2 pr-3 sm:px-3 md:px-4">
         {/* avatar */}
         <img
-          src={post.author.profilePicture}
+          src={user_img}
           alt="avatar"
           className="w-10 h-10 rounded-full object-cover cursor-pointer "
           onClick={() => {
@@ -267,7 +268,7 @@ const Post = ({
           </div>
         </div>
         {/* Edit or delete posts */}
-        {(userId === post.author._id || post.author.isAdmin === true) && (
+        {userId === post.author._id && (
           <div
             className="ml-auto text-[25px] transition-50 cursor-pointer font-bold w-[35px] h-[35px] rounded-full hover:bg-[#F2F2F2] dark:hover:bg-[#3A3B3C] flex flex-row items-center justify-center group relative "
             onClick={() => {
@@ -445,7 +446,7 @@ const Post = ({
       {/* form add comment */}
       <div className="flex gap-x-1.5 px-2 sm:px-3 md:px-4 py-1 items-center ">
         <img
-          src={user_img}
+          src={user.profilePicture}
           alt="user_avatar"
           className="w-8 sm:w-9 h-8 sm:h-9 object-cover shrink-0 rounded-full "
         />

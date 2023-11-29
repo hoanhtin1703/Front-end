@@ -50,8 +50,9 @@ const Profile = () => {
   const getCurrentUser = async (userId) => {
     setLoading(true);
     try {
-      const { data } = await autoFetch.get(`getuserbyid/${userId}`);
+      const { data } = await autoFetch.get(`v1/profile/${currentUserId}`);
       setUser(data.data);
+      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -61,10 +62,8 @@ const Profile = () => {
   const getPostWithUserId = async (userId) => {
     setPostLoading(true);
     try {
-      const { data } = await autoFetch.get(
-        `/api/post/getPostWithUser/${userId}`
-      );
-      setPosts(data.posts);
+      const { data } = await autoFetch.get(`v1/profile/${currentUserId}`);
+      setPosts(data.data.ownPost);
     } catch (error) {
       console.log(error);
     }
@@ -75,9 +74,9 @@ const Profile = () => {
       setImages(
         posts.filter((p) => {
           // @ts-ignore
-          if (p && p.image) {
+          if (p && p.image_url) {
             // @ts-ignore
-            return p.image;
+            return p.image_url;
           }
         })
       );

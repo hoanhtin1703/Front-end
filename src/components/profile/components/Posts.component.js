@@ -63,11 +63,11 @@ const Right = ({
         <Post
           key={p._id}
           currentPost={p}
-          userId={own._id}
-          user_img={own.image.url}
+          userId={user._id}
+          user_img={user.profilePicture}
           getDeletePostId={getDeletePostId}
           className={!dark ? "shadow-post" : ""}
-          userRole={own.role}
+          userRole={user.isAdmin}
         />
       ));
     }

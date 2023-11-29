@@ -296,7 +296,7 @@ const Information = () => {
                     autoFetch={autoFetch}
                     navigate={navigate}
                     postId={post._id}
-                    user_img={user.image.url}
+                    user_img={user.profilePicture}
                   />
                 ))}
               </div>
